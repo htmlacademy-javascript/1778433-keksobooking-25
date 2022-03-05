@@ -1,5 +1,3 @@
-// Функции
-
 // Случайное целое число
 const getRandomInt = (min, max) => {
   if (min >= 0 & max >= 0 & max > min) {
@@ -9,7 +7,6 @@ const getRandomInt = (min, max) => {
   } return 'Неверный диапазон!';
 };
 
-
 // Случайное десятичное число
 const getRandomFloat = (min, max, numsign = 1) => {
   if (min >= 0 & max >= 0 & max > min) {
@@ -18,9 +15,7 @@ const getRandomFloat = (min, max, numsign = 1) => {
   } return 'Неверный диапазон!';
 };
 
-
 // **************************************************************************
-
 
 const generateAvatar = () => {
   const numUser = String(getRandomInt(1, 10)).padStart(2, 0);
@@ -29,9 +24,10 @@ const generateAvatar = () => {
   return author;
 };
 
+//generateAvatar();
+
 
 const generateInfoHouse = () => {
-
 
   const place = {
     lat: getRandomFloat(35.65, 35.7, 5),
@@ -55,37 +51,30 @@ const generateInfoHouse = () => {
 
   // 5)
   const checkinTimes = ['12:00', '13:00', '14:00'];
-  const getCheckinTime = (elem) => checkinTimes[getRandomInt(0, checkinTimes.length - 1)];
+  const getCheckinTime = () => checkinTimes[getRandomInt(0, checkinTimes.length - 1)];
 
   // 6)
-  const getCheckoutTime = (elem) => checkinTimes[getRandomInt(0, checkinTimes.length - 1)];
+  const getCheckoutTime = () => checkinTimes[getRandomInt(0, checkinTimes.length - 1)];
 
   // 7)
-  const featuresList = ['wifi', 'dishwashar', 'parking', 'washer', 'elevator', 'conditioner'];
+  const getRandomFeatures = () => {
 
-  const getRandomFeature = () => {
-    const fea = []; // генерируемый массив
-    const feaLng = getRandomInt(1, featuresList.length); // задаем рандомную длину генерируемому массиву от 1 до 6
+    const featuresList = ['wifi', 'dishwashar', 'parking', 'washer', 'elevator', 'conditioner'];
 
-    while (fea.length < feaLng) {
-      const elemRand = featuresList[getRandomInt(0, featuresList.length-1)]; // рандомный элемент массива с индексом от 0 до 5
-      let found = false;
-      for (let i = 0; i < fea.length; i++) {
-        if (fea[i] === elemRand){
-          found = true;
-          break;
-        }
-      }
-      if (!found) {
-        fea[fea.length]=elemRand;
-      }
+    const features = new Set();
+    const featuresLength = getRandomInt(1, featuresList.length);
+
+    while (features.size < featuresLength) {
+      const randomFeature = featuresList[getRandomInt(0, featuresList.length-1)];
+      features.add(randomFeature);
     }
-    return fea;
+    return [...features];
   };
 
   // 8)
-  const photos = () => {
-    const photosArr = ['https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
+  const getRandomPhotos = () => {
+    const photosArr = [
+      'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/duonguyen-8LrGtIxxa4w.jpg',
       'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/brandon-hoogenboom-SNxQGWxZQi0.jpg',
       'https://assets.htmlacademy.ru/content/intensive/javascript-1/keksobooking/claire-rendall-b6kAwr1i0Iw.jpg'
     ];
@@ -93,19 +82,18 @@ const generateInfoHouse = () => {
     return photosArr.slice(0, getRandomInt(1, photosArr.length));
   };
 
-
   const offer = {
     title: 'Заголовок предложения', // заменить
-    address: place, // Адрес предложения
+    address: place,
     housingPrice,
     type: randomHousingType(),
     rooms,
     guests,
     checkin: getCheckinTime(checkinTimes),
     checkout: getCheckoutTime(checkinTimes),
-    features: getRandomFeature(),
-    description: 'Описание помещения',
-    photos: photos(),
+    features: getRandomFeatures(),
+    description: 'Описание помещения', // заменить
+    photos: getRandomPhotos(),
   };
 
 
@@ -125,3 +113,12 @@ const generateInfoHouse = () => {
   return offer;
 };
 
+const descriptionAdd = () => {
+  return {
+  generateAvatar: generateAvatar(),
+  generateInfoHouse: generateInfoHouse(),
+  };
+};
+
+
+const generateArrAd = Array.from({length: 10}, descriptionAdd);
