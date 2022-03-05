@@ -118,5 +118,9 @@ const descriptionAdd = () => ({
   generateInfoHouse: generateInfoHouse(),
 });
 
-
 const generateArrAd = Array.from({length: 10}, descriptionAdd);
+
+
+// eslint-disable-next-line no-console
+console.log(generateArrAd);
+
