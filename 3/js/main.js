@@ -113,12 +113,10 @@ const generateInfoHouse = () => {
   return offer;
 };
 
-const descriptionAdd = () => {
-  return {
+const descriptionAdd = () => ({
   generateAvatar: generateAvatar(),
   generateInfoHouse: generateInfoHouse(),
-  };
-};
+});
 
 
 const generateArrAd = Array.from({length: 10}, descriptionAdd);
