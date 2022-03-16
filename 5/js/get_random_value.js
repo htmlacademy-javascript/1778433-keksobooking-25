@@ -1,4 +1,3 @@
-
 const getRandomInt = (min, max) => {
   if (min >= 0 & max >= 0 & max > min) {
     min = Math.ceil(min);
@@ -7,7 +6,6 @@ const getRandomInt = (min, max) => {
   } return 'Неверный диапазон!';
 };
 
-
 const getRandomFloat = (min, max, numsign = 1) => {
   if (min >= 0 & max >= 0 & max > min) {
     const result = Math.random() * (max-min) + min;
@@ -15,4 +13,18 @@ const getRandomFloat = (min, max, numsign = 1) => {
   } return 'Неверный диапазон!';
 };
 
-export {getRandomInt, getRandomFloat};
+const getRandomArrayElement = (array) => array[getRandomInt(0, array.length - 1)];
+
+const getRandomArrayLength = (array) => {
+  const dataArray = new Set();
+  const arrayLength = getRandomInt(1, array.length);
+
+  while (dataArray.size < arrayLength) {
+    const randomArray = array[getRandomInt(0, array.length-1)];
+    dataArray.add(randomArray);
+  }
+  return [...dataArray];
+};
+
+
+export {getRandomInt, getRandomFloat, getRandomArrayElement, getRandomArrayLength};
