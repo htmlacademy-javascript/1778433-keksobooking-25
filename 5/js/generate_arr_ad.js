@@ -52,7 +52,6 @@ const generateInfoHouse = () => {
     checkin: getCheckinTime(checkinTimes),
     checkout: getCheckoutTime(checkinTimes),
     features: getRandomArrayLength(features),
-    description,
     photos: getRandomArrayLength(photosArr),
   };
 
