@@ -2,7 +2,6 @@ const form = document.querySelector('.ad-form');
 const price = form.querySelector('#price');
 const roomNumberField = form.querySelector('#room_number');
 
-
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',              // Элемент, на который будут добавляться классы
   errorClass: 'form__item--invalid', // Класс, обозначающий невалидное поле
@@ -12,22 +11,6 @@ const pristine = new Pristine(form, {
   errorTextClass: 'form__error',       // Класс для элемента с текстом ошибки
 });
 
-// Просто копия настроек для Pristine
-const classObject =  {
-  classTo: 'ad-form__element',
-  errorClass: 'form__item--invalid',
-  successClass: 'form__item--valid',
-  errorTextParent: 'ad-form__element',
-  errorTextTag: 'span',
-  errorTextClass: 'form__error',
-};
-
-// Объект, в котором будут храниться Prisitine для каждого input в форме
-// Нужно просто добавлять поля по аналогии
-const ValidationObject = {
-  roomNumber: new Pristine(roomNumberField, classObject),
-};
-
 // Title
 const validateTitle = (value) => value.length >= 30 && value.length <= 100;
 
@@ -35,10 +18,8 @@ pristine.addValidator(
   form.querySelector('#title'), validateTitle, 'От 30 до 100 символов'
 );
 
-// ValidationObject.roomNumber.addValidator(roomNumberField, (value) => console.log(value) && true, 'Тестовая ошибка');
-
 // Price
-const validatePrice = (value) => parseInt(value) >= 0 && parseInt(value) <= 100000;
+const validatePrice = (value) => parseInt(value, 10) >= 0 && parseInt(value, 10) <= 100000;
 pristine.addValidator(price, validatePrice, 'От 0 до 100 000');
 
 // Rooms and guests
@@ -53,19 +34,13 @@ const settleOption = {
 function validateSettle () {
   return settleOption[roomNumberField.value].includes(capacityField.value);
 }
-
 const getSettleErrorMessage = () => 'Недопустимый вариант заселения';
 
-// Для каждого поля добавляет валидатор
-// Соответственно, для capacityField выглядело бы вот так
-// ValidationObject.capacityField.addValidator(capacityField, validateSettle, getSettleErrorMessage);
-ValidationObject.roomNumber.addValidator(roomNumberField, validateSettle, getSettleErrorMessage);
+pristine.addValidator(roomNumberField, validateSettle, getSettleErrorMessage);
 pristine.addValidator(capacityField, validateSettle, getSettleErrorMessage);
 
-// --------------------------------------------------------------------------------
-
 // Тип жилья
-const TypesOfHousing = form.querySelector('#type');
+const typesOfHousing = form.querySelector('#type');
 const housingMinPrices = {
   bungalow : 0,
   flat : 1000,
@@ -75,21 +50,29 @@ const housingMinPrices = {
 };
 
 function validateTypesOfHousing (value) {
-  const unit = TypesOfHousing.value;
-  return parseInt(value) >= housingMinPrices[unit];
+  const unit = typesOfHousing.value;
+  return parseInt(value, 10) >= housingMinPrices[unit];
 }
 
-pristine.addValidator(TypesOfHousing, validateTypesOfHousing, 'Цена не соответствует');
-pristine.addValidator(price, validateTypesOfHousing, 'Цена не соответствует');
+function onUnitChangePrice () {
+  price.placeholder = housingMinPrices[this.value];
+  pristine.validate(price);
+}
+
+typesOfHousing.querySelectorAll('option').forEach((item) => item.addEventListener('change', onUnitChangePrice));
+
+const getTypesOfHousingErrorMessage = () => 'Цена не соответствует';
+
+pristine.addValidator(typesOfHousing, validateTypesOfHousing, getTypesOfHousingErrorMessage);
+pristine.addValidator(price, validateTypesOfHousing, getTypesOfHousingErrorMessage);
 
 
 // Добавляем обработчик на изменения значения в input
 roomNumberField.addEventListener('change', () => {
-  ValidationObject.roomNumber.validate();
+  pristine.validate();
 });
 
 form.addEventListener('submit', (evt) => {
   evt.preventDefault();
   pristine.validate();
-
 });
