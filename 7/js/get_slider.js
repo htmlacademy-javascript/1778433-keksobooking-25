@@ -1,4 +1,4 @@
-const sliderElement = document.querySelector('.ad-form__slider'); // div
+const sliderElement = document.querySelector('.ad-form__slider');
 const valueElement = document.querySelector('#price');
 const typesOfHousing = document.querySelector('#type');
 
@@ -28,46 +28,43 @@ sliderElement.noUiSlider.on('update', () => {
 });
 
 typesOfHousing.addEventListener('change', (evt) => {
-  switch(evt.target.value) {
-    case 'bungalow': sliderElement.noUiSlider.updateOptions({
+  const config = {
+    bungalow: {
       range: {
         min: 0,
         max: 3000,
       },
       step: 200,
-    });
-      break;
-    case 'flat': sliderElement.noUiSlider.updateOptions({
+    },
+    flat: {
       range: {
         min: 1000,
         max: 10000
       },
       step: 1000,
-    });
-      break;
-    case 'hotel': sliderElement.noUiSlider.updateOptions({
+    },
+    hotel: {
       range: {
         min: 3000,
         max: 20000
       },
       step: 1000,
-    });
-      break;
-    case 'house': sliderElement.noUiSlider.updateOptions({
+    },
+    house: {
       range: {
         min: 5000,
         max: 50000
       },
       step: 2000,
-    });
-      break;
-    case 'palace': sliderElement.noUiSlider.updateOptions({
+    },
+    palace: {
       range: {
         min: 10000,
         max: 100000
       },
       step: 5000,
-    });
-      break;
-  }
+    }
+  };
+
+  sliderElement.noUiSlider.updateOptions(config[evt.target.value]);
 });
