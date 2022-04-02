@@ -9,7 +9,7 @@ const generateAvatar = () => {
 
 const generateInfoHouse = () => {
 
-  const address = {
+  const location = {
     lat: getRandomFloat(35.65, 35.7, 5),
     lng: getRandomFloat(139.7, 139.8, 5),
   };
@@ -44,7 +44,7 @@ const generateInfoHouse = () => {
 
   const offer = {
     title: 'Заголовок предложения',
-    address,
+    location,
     price,
     type,
     rooms,
@@ -71,9 +71,12 @@ const generateInfoHouse = () => {
   return offer;
 };
 
-const generateArrAd = new Array(4).fill(null).map(() => ({
+const generateArrAd = new Array(5).fill(null).map(() => ({
   avatar: generateAvatar(),
   ...generateInfoHouse(),
 }));
 
-export {generateArrAd};
+const offers = generateArrAd;
+
+
+export {offers};

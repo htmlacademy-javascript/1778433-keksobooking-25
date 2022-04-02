@@ -1,6 +1,10 @@
+export {sendAdvert} from './api.js';
+export {showAlert} from './utils.js';
+
 const form = document.querySelector('.ad-form');
 const price = form.querySelector('#price');
 const roomNumberField = form.querySelector('#room_number');
+const submitButton = form.querySelector('.ad-form__submit');
 
 const pristine = new Pristine(form, {
   classTo: 'ad-form__element',              // Элемент, на который будут добавляться классы
@@ -71,7 +75,37 @@ roomNumberField.addEventListener('change', () => {
   pristine.validate();
 });
 
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  pristine.validate();
-});
+// Block button
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Отправляю...';
+};
+
+// Unblock button
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const setUserFormSubmit = (onSuccess) => {
+  form.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    const isValid = pristine.validate();
+    if (isValid) {
+      blockSubmitButton();
+      sendAdvert(() => {
+        onSuccess();
+        unblockSubmitButton();
+      },
+      () => {
+        showAlert('Не удалось отправить форму. Попробуйте еще раз');
+        unblockSubmitButton();
+      },
+      new FormData(evt.target),
+      );
+    }
+  });
+};
+
+export {setUserFormSubmit};
