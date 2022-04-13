@@ -1,6 +1,7 @@
 import {createCustomPopup} from './popup.js';
-import { offers } from './generate_arr_ad.js';
 import {getAdverts} from './api.js';
+import {setFilterChange, debounce} from './utils.js';
+
 
 const START_COORDINATE = {
   lat: 35.68948,
@@ -9,8 +10,8 @@ const START_COORDINATE = {
 
 const MAP_MARKER_MAIN = {
   iconUrl: './img/main-pin.svg',
-  iconSize: [62, 85],
-  iconAnchor: [31, 85],
+  iconSize: [52, 52],
+  iconAnchor: [26, 52],
 };
 
 const MAP_MARKER_DEFAULT = {
@@ -22,12 +23,13 @@ const MAP_MARKER_DEFAULT = {
 const MAP_TILE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const MAP_COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
+const RENDER_DELAY = 500;
+
 //******************************************************************** */
 
-// Creat map
+// Create map
 const map = L.map('map-canvas')
   .on('load', () => {
-    console.log('Карта инициализирована');
   })
   .setView(START_COORDINATE, 11);
 
@@ -49,7 +51,7 @@ const mainPinMarker = L.marker(START_COORDINATE,
 mainPinMarker.addTo(map);
 
 const addressField = document.querySelector('#address');
-// Function for setting coordinate
+
 const setCoordinate = ({lat, lng}) => {
   const latItem = parseFloat(lat).toFixed(5);
   const lngItem = parseFloat(lng).toFixed(5);
@@ -61,39 +63,29 @@ mainPinMarker.on('moveend', (evt) => {
   setCoordinate(evt.target.getLatLng());
 });
 
-// Setup offers from data
-// loadAdverts().then(array => {
-//   array.forEach((item) => {
-//     const {lat, lng} = item.location;
-//     const icon = L.icon(MAP_MARKER_DEFAULT);
-//     const marker = L.marker({
-//       lat,
-//       lng,
-//     },
-//     {
-//       icon,
-//     });
-//     marker.addTo(map).bindPopup(createCustomPopup(item));
-//   });
-// }, );
+const markerGroup = L.layerGroup().addTo(map);
 
-getAdverts().then(array => {
-  array.forEach((item) => {
-    const {lat, lng} = item.location;
-    const icon = L.icon(MAP_MARKER_DEFAULT);
-    const marker = L.marker({
-      lat,
-      lng,
-    },
-    {
-      icon,
+const renderPinList = () => {
+  getAdverts().then((array) => {
+    markerGroup.clearLayers();
+    array.forEach((item) => {
+      const {lat, lng} = item.location;
+      const icon = L.icon(MAP_MARKER_DEFAULT);
+      const marker = L.marker({
+        lat,
+        lng,
+      },
+      {
+        icon,
+      });
+      marker.addTo(markerGroup).bindPopup(createCustomPopup(item));
     });
-    marker.addTo(map).bindPopup(createCustomPopup(item));
-  });
-}, );
+  }, );
+};
 
+renderPinList();
 
-
+setFilterChange(debounce(() => renderPinList(), RENDER_DELAY));
 
 // Reset map
 addressField.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
@@ -102,6 +94,8 @@ addressField.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng
 const resetButton = document.querySelector('.ad-form__reset');
 resetButton.addEventListener('click', () => {
   mainPinMarker.setLatLng(START_COORDINATE);
-  map.setView(START_COORDINATE, 16);
+  map.setView(START_COORDINATE, 11);
+  setTimeout(() => {
+    addressField.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
+  }, 1);
 });
-

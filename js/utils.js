@@ -1,3 +1,5 @@
+const formFilter = document.querySelector('.map__filters');
+
 const ALERT_SHOW_TIME = 5000;
 
 const showAlert = (message) => {
@@ -21,4 +23,17 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {showAlert};
+const setFilterChange = (cb) => {
+  formFilter.addEventListener('change', () => cb());
+};
+
+const debounce = (callback, timeoutDelay) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+
+export {showAlert, setFilterChange, debounce};

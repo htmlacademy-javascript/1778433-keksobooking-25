@@ -3,7 +3,6 @@ const cardTemplate = document.querySelector('#card').content.querySelector('.pop
 const mapCanvas = document.querySelector('#map-canvas');
 const photoListElement = document.querySelector('.popup__photos');
 const photoListElementFragment = document.createDocumentFragment();
-//const popupListElement = document.createDocumentFragment();
 
 const createCustomPopup = (item) => {
   const popupItem = cardTemplate.cloneNode(true);
@@ -11,7 +10,7 @@ const createCustomPopup = (item) => {
   const descriptionElement = popupItem.querySelector('.popup__description');
 
   popupItem.querySelector('.popup__title').textContent = item.offer.title;
-  popupItem.querySelector('.popup__text--address').textContent = `${item.location.lat} - ${item.location.lng}`;
+  popupItem.querySelector('.popup__text--address').textContent = `${item.location.lat.toFixed(5)} - ${item.location.lng.toFixed(5)}`;
   popupItem.querySelector('.popup__text--price').textContent = `${item.offer.price} ₽/ночь`;
   popupItem.querySelector('.popup__type').textContent = item.offer.type;
   popupItem.querySelector('.popup__text--capacity').textContent = `${item.offer.rooms} комнаты для ${item.offer.guests} гостей`;
@@ -21,10 +20,10 @@ const createCustomPopup = (item) => {
   mapCanvas.appendChild(popupItem);
 
   if (item.offer.features) {
-  //featureListElement.textContent = '';
-    item.offer.features.forEach((item) => {
+    featureListElement.textContent = '';
+    item.offer.features.forEach((elem) => {
       const featureElement = document.createElement('li');
-      const featureClass = `popup__feature--${item}`;
+      const featureClass = `popup__feature--${elem}`;
       featureElement.classList.add('popup__feature', featureClass);
       featureListElement.appendChild(featureElement);
     });
@@ -42,8 +41,7 @@ const createCustomPopup = (item) => {
       }
     });
   }
-popupItem.querySelector('.popup__photo').remove();
-
+  popupItem.querySelector('.popup__photo').remove();
   popupItem.appendChild(photoListElementFragment);
 
   // Скрытие блока, если нет данных
