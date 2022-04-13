@@ -93,7 +93,6 @@ form.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (isValid) {
     blockSubmitButton();
-    console.log('Форма валидна');
     const formData = new FormData(evt.target); // Сбор данных из формы в один объект
 
     fetch(API_URL,
@@ -106,12 +105,12 @@ form.addEventListener('submit', (evt) => {
         if (responce.status >= 300) {
           displayModalError();
           unblockSubmitButton();
-          console.log('Не опубликовано');
+
         }
         else {
           displayModalSuccess();
           unblockSubmitButton();
-          console.log('Опубликовано');
+
         }
       }
       );

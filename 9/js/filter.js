@@ -7,7 +7,7 @@ const selectGuests  = formFilter.querySelector('#housing-guests'); // кол-в�
 const priceMap = {
   low: {min: 0, max: 10000},
   middle: {min: 10000, max: 50000},
-  high: {min: 50000, max: Infinity},
+  high: {min: 50000, max: 100000},
 };
 
 const filterAdverts = (advert) => {
@@ -19,9 +19,9 @@ const filterAdverts = (advert) => {
   const checkPrice = () => selectPrice.value === 'any' ? true :
     advert.offer.price >= priceMap[selectPrice.value].min && advert.offer.price < priceMap[selectPrice.value].max;
   // число комнат
-  const checkRooms = () => selectRooms.value === 'any' || advert.offer.rooms === +selectRooms.value;
+  const checkRooms = () => selectRooms.value === 'any' || advert.offer.rooms === Number(selectRooms.value);
   // число гостей
-  const checkGuests = () => selectGuests.value === 'any' || advert.offer.guests === +selectGuests.value;
+  const checkGuests = () => selectGuests.value === 'any' || advert.offer.guests === Number(selectGuests.value);
   // преимущества
   const checkFeatures = () => {
     if (advert.offer.features) {

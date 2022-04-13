@@ -1,6 +1,23 @@
 const displaySuccessTemplate = document.querySelector('#success').content.cloneNode(true); // копия шаблона при успешной отправке
 const displayErrorTemplate = document.querySelector('#error').content.cloneNode(true); // копия шаблона при ошибке отправки
 
+const isHidden = (elem) => {
+  document.addEventListener('click', (e) => {
+    const click = e.composedPath();
+    if (click) {
+      elem.classList.add('hidden');
+    }
+  });
+};
+
+const isEscape = (elem) => {
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      elem.classList.add('hidden');
+    }
+  });
+};
+
 
 const displayModalSuccess = () => {
   const ElementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
@@ -8,17 +25,8 @@ const displayModalSuccess = () => {
   document.body.appendChild(ElementFragment);
   const displaySuccess =  document.querySelector('.success');
   displaySuccess.classList.remove('hidden');
-  document.addEventListener('click', (e) => {
-    const click = e.composedPath();
-    if (click) {
-      displaySuccess.classList.add('hidden');
-    }
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      displaySuccess.classList.add('hidden');
-    }
-  });
+  isHidden(displaySuccess);
+  isEscape(displaySuccess);
 };
 
 const displayModalError = () => {
@@ -28,21 +36,11 @@ const displayModalError = () => {
   document.body.appendChild(ElementFragment);
   const displayError =  document.querySelector('.error');
   displayError.classList.remove('hidden');
-  document.addEventListener('click', (e) => {
-    const click = e.composedPath();
-    if (click) {
-      displayError.classList.add('hidden');
-    }
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      displayError.classList.add('hidden');
-    }
-  });
+  isHidden(displayError);
+  isEscape(displayError);
   buttonModalError.addEventListener('click', () => {
     displayError.classList.add('hidden');
   });
 };
-
 
 export {displayModalSuccess, displayModalError};
