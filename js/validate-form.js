@@ -1,4 +1,4 @@
-import {API_URL} from './api.js';
+import {sendAdvert} from './api.js';
 import {displayModalSuccess, displayModalError} from './modal.js';
 
 const form = document.querySelector('.ad-form');
@@ -93,27 +93,17 @@ form.addEventListener('submit', (evt) => {
   const isValid = pristine.validate();
   if (isValid) {
     blockSubmitButton();
-    const formData = new FormData(evt.target); // Сбор данных из формы в один объект
-
-    fetch(API_URL,
-      {
-        method: 'POST',
-        body: formData,
+    const formData = new FormData(evt.target);
+    sendAdvert(
+      () => {
+        displayModalSuccess();
+        unblockSubmitButton();
       },
-    )
-      .then((responce) => {
-        if (responce.status >= 300) {
-          displayModalError();
-          unblockSubmitButton();
-
-        }
-        else {
-          displayModalSuccess();
-          unblockSubmitButton();
-
-        }
-      }
-      );
+      () => {
+        displayModalError();
+        unblockSubmitButton();
+      },
+      formData,
+    );
   }
 });
-

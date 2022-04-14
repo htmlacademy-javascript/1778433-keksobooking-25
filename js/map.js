@@ -1,6 +1,7 @@
 import {createCustomPopup} from './popup.js';
 import {getAdverts} from './api.js';
 import {setFilterChange, debounce} from './utils.js';
+import {filterAdverts} from './filter.js';
 
 
 const START_COORDINATE = {
@@ -25,7 +26,7 @@ const MAP_COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">
 
 const RENDER_DELAY = 500;
 
-//******************************************************************** */
+const ADVERT_COUNT = 10;
 
 // Create map
 const map = L.map('map-canvas')
@@ -65,27 +66,30 @@ mainPinMarker.on('moveend', (evt) => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const renderPinList = () => {
-  getAdverts().then((array) => {
-    markerGroup.clearLayers();
-    array.forEach((item) => {
-      const {lat, lng} = item.location;
-      const icon = L.icon(MAP_MARKER_DEFAULT);
-      const marker = L.marker({
-        lat,
-        lng,
-      },
-      {
-        icon,
-      });
-      marker.addTo(markerGroup).bindPopup(createCustomPopup(item));
+const renderPinList = (array) => {
+  markerGroup.clearLayers();
+  array.filter(filterAdverts).slice(0, ADVERT_COUNT).forEach((item) => {
+    const {lat, lng} = item.location;
+    const icon = L.icon(MAP_MARKER_DEFAULT);
+    const marker = L.marker({
+      lat,
+      lng,
+    },
+    {
+      icon,
     });
+    marker.addTo(markerGroup).bindPopup(createCustomPopup(item));
   }, );
 };
 
-renderPinList();
+let pins = [];
 
-setFilterChange(debounce(() => renderPinList(), RENDER_DELAY));
+getAdverts().then((array) => {
+  pins = array;
+  renderPinList(pins);
+});
+
+setFilterChange(debounce(() => renderPinList(pins), RENDER_DELAY));
 
 // Reset map
 addressField.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;

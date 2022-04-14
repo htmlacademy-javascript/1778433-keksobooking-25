@@ -1,13 +1,12 @@
 import {showAlert} from './utils.js';
-import {filterAdverts} from './filter.js';
 
 const API_URL = 'https://25.javascript.pages.academy/keksobooking';
-const ADVERT_COUNT = 10;
+
 const elemFormMap = document.querySelectorAll('.map__filter, .map__features');
 
 const getAdverts = () => fetch(`${API_URL}/data`)
   .then((response) => response.json())
-  .then((offers) => offers.filter(filterAdverts).slice(0, ADVERT_COUNT))
+  .then((offers) => offers)
   .catch(() => {
     showAlert('Ошибка при загрузке данных с сервера!');
     elemFormMap.forEach((elem) => elem.setAttribute('disabled', 'disabled'));
@@ -20,13 +19,14 @@ const sendAdvert = (onSuccess, onError, body) => {
       body,
     },
   ).then((response) => {
-    if (response.ok) {
+    if (response.status < 300) {
       onSuccess();
-    } else {
+    }
+    else {
       throw new Error();
     }
-  }).catch((err) => onError(err));
+  }).catch(() => onError());
 };
 
 
-export {getAdverts, sendAdvert, API_URL};
+export {getAdverts, sendAdvert};
