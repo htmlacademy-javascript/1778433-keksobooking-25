@@ -2,7 +2,7 @@ import {createCustomPopup} from './popup.js';
 import {getAdverts} from './api.js';
 import {setFilterChange, debounce} from './utils.js';
 import {filterAdverts} from './filter.js';
-import { sliderElement } from './get_slider.js';
+import {sliderElement} from './get_slider.js';
 
 const form = document.querySelector('.ad-form');
 const addressField = document.querySelector('#address');
