@@ -20,9 +20,9 @@ const isEscape = (elem) => {
 
 
 const displayModalSuccess = () => {
-  const ElementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
-  ElementFragment.appendChild(displaySuccessTemplate);
-  document.body.appendChild(ElementFragment);
+  const elementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
+  elementFragment.appendChild(displaySuccessTemplate);
+  document.body.appendChild(elementFragment);
   const displaySuccess =  document.querySelector('.success');
   displaySuccess.classList.remove('hidden');
   isHidden(displaySuccess);
@@ -30,10 +30,10 @@ const displayModalSuccess = () => {
 };
 
 const displayModalError = () => {
-  const ElementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
+  const elementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
   const buttonModalError = document.querySelector('.error__button'); // "Попробовать снова"
-  ElementFragment.appendChild(displayErrorTemplate);
-  document.body.appendChild(ElementFragment);
+  elementFragment.appendChild(displayErrorTemplate);
+  document.body.appendChild(elementFragment);
   const displayError =  document.querySelector('.error');
   displayError.classList.remove('hidden');
   isHidden(displayError);

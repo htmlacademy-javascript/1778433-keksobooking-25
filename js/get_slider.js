@@ -7,7 +7,7 @@ noUiSlider.create(sliderElement, {
     min: 0,
     max: 100000,
   },
-  start: 5000,
+  start: 0,
   step: 500,
   connect: 'lower',
   format: {
@@ -68,3 +68,6 @@ typesOfHousing.addEventListener('change', (evt) => {
 
   sliderElement.noUiSlider.updateOptions(config[evt.target.value]);
 });
+
+
+export {sliderElement};

@@ -1,5 +1,6 @@
 import {sendAdvert} from './api.js';
 import {displayModalSuccess, displayModalError} from './modal.js';
+import { resetForm } from './map.js';
 
 const form = document.querySelector('.ad-form');
 const titleField = form.querySelector('#title');
@@ -98,10 +99,12 @@ form.addEventListener('submit', (evt) => {
       () => {
         displayModalSuccess();
         unblockSubmitButton();
+        resetForm(form);
       },
       () => {
         displayModalError();
         unblockSubmitButton();
+        resetForm(form);
       },
       formData,
     );

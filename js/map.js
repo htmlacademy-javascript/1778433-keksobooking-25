@@ -2,12 +2,17 @@ import {createCustomPopup} from './popup.js';
 import {getAdverts} from './api.js';
 import {setFilterChange, debounce} from './utils.js';
 import {filterAdverts} from './filter.js';
+import {sliderElement} from './get_slider.js';
 
+const form = document.querySelector('.ad-form');
+const addressField = document.querySelector('#address');
 
 const START_COORDINATE = {
   lat: 35.68948,
   lng: 139.69170,
 };
+
+const addressDefault = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
 
 const MAP_MARKER_MAIN = {
   iconUrl: './img/main-pin.svg',
@@ -23,6 +28,7 @@ const MAP_MARKER_DEFAULT = {
 
 const MAP_TILE = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const MAP_COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const avatarDefaultSrc = 'img/muffin-grey.svg';
 
 const RENDER_DELAY = 500;
 
@@ -50,8 +56,6 @@ const mainPinMarker = L.marker(START_COORDINATE,
   },
 );
 mainPinMarker.addTo(map);
-
-const addressField = document.querySelector('#address');
 
 const setCoordinate = ({lat, lng}) => {
   const latItem = parseFloat(lat).toFixed(5);
@@ -92,14 +96,23 @@ getAdverts().then((array) => {
 setFilterChange(debounce(() => renderPinList(pins), RENDER_DELAY));
 
 // Reset map
-addressField.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
+addressField.value = addressDefault;
+
+// Reset form
+const resetForm = (item) => {
+  item.reset();
+  mainPinMarker.setLatLng(START_COORDINATE);
+  map.setView(START_COORDINATE, 11);
+  sliderElement.noUiSlider.set(0);
+  setTimeout(() => {
+    addressField.value = addressDefault;
+  }, 1);
+  document.querySelector('.ad-form-header__preview img').src = avatarDefaultSrc;
+};
 
 // Reset button
 const resetButton = document.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', () => {
-  mainPinMarker.setLatLng(START_COORDINATE);
-  map.setView(START_COORDINATE, 11);
-  setTimeout(() => {
-    addressField.value = `${START_COORDINATE.lat.toFixed(5)}, ${START_COORDINATE.lng.toFixed(5)}`;
-  }, 1);
-});
+resetButton.addEventListener('click', () => resetForm(form));
+
+export {resetForm};
+
