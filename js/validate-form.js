@@ -35,9 +35,7 @@ const settleOption = {
   '100' : ['0']
 };
 
-function validateSettle () {
-  return settleOption[roomNumberField.value].includes(capacityField.value);
-}
+const validateSettle = () => settleOption[roomNumberField.value].includes(capacityField.value);
 const getSettleErrorMessage = () => 'Недопустимый вариант заселения';
 
 pristine.addValidator(roomNumberField, validateSettle, getSettleErrorMessage);
@@ -54,16 +52,16 @@ const housingMinPrices = {
 
 const validateTypesOfHousing = (type) => Number(priceField.value) >= housingMinPrices[type];
 
-function validateTypesOfHousingPrice (value) {
+const validateTypesOfHousingPrice = (value) => {
   const unit = typesOfHousing.value;
   return Number(value) >= housingMinPrices[unit];
-}
+};
 
-function onUnitChangePrice (value) {
+const onUnitChangePrice = (value) => {
   priceField.placeholder = housingMinPrices[value];
   pristine.validate(priceField);
   pristine.validate(typesOfHousing);
-}
+};
 typesOfHousing.addEventListener('change', () => onUnitChangePrice(typesOfHousing.value));
 
 const getTypesOfHousingErrorMessage = () => 'Цена не соответствует';

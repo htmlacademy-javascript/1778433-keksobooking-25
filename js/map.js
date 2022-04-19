@@ -2,10 +2,7 @@ import {createCustomPopup} from './popup.js';
 import {getAdverts} from './api.js';
 import {setFilterChange, debounce} from './utils.js';
 import {filterAdverts} from './filter.js';
-import {sliderElement} from './get_slider.js';
-
-const form = document.querySelector('.ad-form');
-const addressField = document.querySelector('#address');
+import {sliderElement} from './get-slider.js';
 
 const START_COORDINATE = {
   lat: 35.68948,
@@ -31,8 +28,13 @@ const MAP_COPYRIGHT = '&copy; <a href="https://www.openstreetmap.org/copyright">
 const avatarDefaultSrc = 'img/muffin-grey.svg';
 
 const RENDER_DELAY = 500;
-
 const ADVERT_COUNT = 10;
+
+let pins = [];
+
+const form = document.querySelector('.ad-form');
+const addressField = document.querySelector('#address');
+const resetButton = document.querySelector('.ad-form__reset');
 
 // Create map
 const map = L.map('map-canvas')
@@ -70,26 +72,26 @@ mainPinMarker.on('moveend', (evt) => {
 
 const markerGroup = L.layerGroup().addTo(map);
 
-const renderPinList = (array) => {
+const renderPinList = (adverts) => {
   markerGroup.clearLayers();
-  array.filter(filterAdverts).slice(0, ADVERT_COUNT).forEach((item) => {
-    const {lat, lng} = item.location;
-    const icon = L.icon(MAP_MARKER_DEFAULT);
-    const marker = L.marker({
-      lat,
-      lng,
-    },
-    {
-      icon,
-    });
-    marker.addTo(markerGroup).bindPopup(createCustomPopup(item));
-  }, );
+  if (adverts) {
+    adverts.filter(filterAdverts).slice(0, ADVERT_COUNT).forEach((item) => {
+      const {lat, lng} = item.location;
+      const icon = L.icon(MAP_MARKER_DEFAULT);
+      const marker = L.marker({
+        lat,
+        lng,
+      },
+      {
+        icon,
+      });
+      marker.addTo(markerGroup).bindPopup(createCustomPopup(item));
+    }, );
+  }
 };
 
-let pins = [];
-
-getAdverts().then((array) => {
-  pins = array;
+getAdverts().then((adverts) => {
+  pins = adverts;
   renderPinList(pins);
 });
 
@@ -108,11 +110,15 @@ const resetForm = (item) => {
     addressField.value = addressDefault;
   }, 1);
   document.querySelector('.ad-form-header__preview img').src = avatarDefaultSrc;
+  const formPhoto = document.querySelector('.ad-form__photo img');
+  if (formPhoto) {
+    formPhoto.remove();
+  }
 };
 
 // Reset button
-const resetButton = document.querySelector('.ad-form__reset');
-resetButton.addEventListener('click', () => resetForm(form));
+resetButton.addEventListener('click', () => {
+  resetForm(form);
+});
 
 export {resetForm};
-

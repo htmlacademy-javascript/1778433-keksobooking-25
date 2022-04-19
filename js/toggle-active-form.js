@@ -6,17 +6,17 @@ const mapFiltersFieldset = mapFilters.querySelectorAll('fieldset');
 
 const mapFiltersField = [fieldsetForm, mapFiltersSelect, mapFiltersFieldset];
 
-const formDisactive = () => {
+const deactivateForm = () => {
   form.classList.add('ad-form--disabled');
   mapFilters.classList.add('map__filters--disabled');
   mapFiltersField.forEach((item) => {item.disabled = true;});
 };
 
-const formActive = () => {
+const activateForm = () => {
   form.classList.remove('ad-form--disabled');
   mapFilters.classList.remove('map__filters--disabled');
   mapFiltersField.forEach((item) => {item.disabled = false;});
 };
 
-formDisactive();
-formActive();
+deactivateForm();
+activateForm();

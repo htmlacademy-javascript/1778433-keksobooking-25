@@ -7,7 +7,7 @@ const isHidden = (elem) => {
     if (click) {
       elem.classList.add('hidden');
     }
-  });
+  }, {once: true});
 };
 
 const isEscape = (elem) => {
@@ -15,12 +15,12 @@ const isEscape = (elem) => {
     if (e.key === 'Escape') {
       elem.classList.add('hidden');
     }
-  });
+  }, {once: true});
 };
 
 
 const displayModalSuccess = () => {
-  const elementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
+  const elementFragment = document.createDocumentFragment();
   elementFragment.appendChild(displaySuccessTemplate);
   document.body.appendChild(elementFragment);
   const displaySuccess =  document.querySelector('.success');
@@ -30,8 +30,8 @@ const displayModalSuccess = () => {
 };
 
 const displayModalError = () => {
-  const elementFragment = document.createDocumentFragment(); // фрагмент DOM-дерева
-  const buttonModalError = document.querySelector('.error__button'); // "Попробовать снова"
+  const elementFragment = document.createDocumentFragment();
+  const buttonModalError = document.querySelector('.error__button');
   elementFragment.appendChild(displayErrorTemplate);
   document.body.appendChild(elementFragment);
   const displayError =  document.querySelector('.error');
@@ -40,7 +40,7 @@ const displayModalError = () => {
   isEscape(displayError);
   buttonModalError.addEventListener('click', () => {
     displayError.classList.add('hidden');
-  });
+  }, {once: true});
 };
 
 export {displayModalSuccess, displayModalError};
