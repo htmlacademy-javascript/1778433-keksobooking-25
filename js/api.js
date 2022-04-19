@@ -23,7 +23,7 @@ const sendAdvert = (onSuccess, onError, body) => {
       onSuccess();
     }
     else {
-      throw new Error();
+      onError();
     }
   }).catch(() => onError());
 };

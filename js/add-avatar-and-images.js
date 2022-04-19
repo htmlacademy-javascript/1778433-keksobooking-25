@@ -1,9 +1,10 @@
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+
 const avatarChooser = document.querySelector('#avatar');
 const previewAvatar = document.querySelector('.ad-form-header__preview img');
 const imagesChooser = document.querySelector('#images');
 const previewImages = document.querySelector('.ad-form__photo');
 
-const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
 // Avatar
 avatarChooser.addEventListener('change', () => {
